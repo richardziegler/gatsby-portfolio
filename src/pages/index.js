@@ -1,14 +1,22 @@
-import React from "react"
-import { Link } from "gatsby"
-import Header from "../components/header"
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import App from '../components/App';
+import { headData } from '../mock/data';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../style/main.scss';
 
-export default function Home() {
+export default () => {
+  const { title, lang, description } = headData;
+
   return (
-    <div style={{ color: `purple` }}>
-      <Link to="/contact/">Contact</Link>
-      <Header headerText="Hello Gatsby!" />
-      <p>What a world.</p>
-      <img src="https://source.unsplash.com/random/400x200" alt="" />
-    </div>
-  )
-}
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{title || 'Richard Ziegler Portfolio'}</title>
+        <html lang={lang || 'en'} />
+        <meta name="description" content={description || 'Richard Ziegler Portfolio'} />
+      </Helmet>
+      <App />
+    </>
+  );
+};
