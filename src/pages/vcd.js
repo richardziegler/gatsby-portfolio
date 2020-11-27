@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../style/main.scss'
 import TextField from '@material-ui/core/TextField'
@@ -14,6 +14,22 @@ import { makeStyles } from '@material-ui/core/styles'
 import { headData } from '../mock/data'
 
 const useStyles = makeStyles({
+  flex: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  container: {
+    margin: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    display: 'flex',
+    width: '30%',
+    marginTop: '1em',
+    marginBottom: '1em',
+  },
   root: {
     background: 'linear-gradient(45deg, #4589ff 30%, #FF8E53 90%)',
     border: 0,
@@ -33,10 +49,32 @@ export default () => {
   const { title, lang, description } = headData
   const classes = useStyles()
   const [topics, setTopics] = useState([1, 2, 3, 4])
-  const [name, setName] = React.useState('Cat in the Hat')
+  const [topic, setTopic] = React.useState('')
   const handleChange = (event) => {
-    setName(event.target.value)
+    setTopic(event.target.value)
   }
+
+  const shuffleArray = () => {
+    for (let i = topics.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[topics[i], topics[j]] = [topics[j], topics[i]]
+    }
+    setTopics([...topics])
+  }
+
+  const renderList = (topic, index) => {
+    return (
+      <Card key={index} className={classes.card}>
+        <ListItem>
+          <ListItemText primary={topic} secondary={index} />
+        </ListItem>
+      </Card>
+    )
+  }
+
+  // useEffect(() => {
+  //     renderList()
+  // }), [topics]
 
   return (
     <>
@@ -47,32 +85,50 @@ export default () => {
 
       <CssBaseline />
       <Container maxWidth="sm">
-        <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '10vh' }} />
-        <TextField
-          value={name}
-          onChange={handleChange}
-          id="filled-basic"
-          label="Topic"
-          variant="filled"
-        />
+        <Typography
+          variant="h3"
+          component="div"
+          style={{ backgroundColor: '#cfe8fc', height: '10vh' }}
+        >
+          Welcome to the VCD Page!
+        </Typography>
+        <div className={classes.flex}>
+          <TextField
+            className={classes.input}
+            value={topic}
+            onChange={handleChange}
+            id="filled-basic"
+            label="VCD Topic"
+            variant="filled"
+          />
+        </div>
         <Button
           className={classes.root}
           variant="outlined"
           size="small"
-          onClick={() => setTopics([...topics, name])}
+          disabled={topic === ''}
+          onClick={() => setTopics([...topics, topic])}
         >
           Click Me!
         </Button>
 
         <List>
-          {topics.map((topic) => (
-            <Card className={classes.card}>
+          {topics.map((topic, index) => (
+            <Card key={index} className={classes.card}>
               <ListItem>
                 <ListItemText primary={topic} />
               </ListItem>
             </Card>
           ))}
         </List>
+        <Button
+          className={classes.root}
+          variant="outlined"
+          size="small"
+          onClick={() => shuffleArray()}
+        >
+          Shuffle List!
+        </Button>
       </Container>
     </>
   )
