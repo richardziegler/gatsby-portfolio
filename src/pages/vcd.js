@@ -40,15 +40,16 @@ const useStyles = makeStyles({
     padding: '0 30px',
   },
   card: {
-    maxWidth: '25%',
+    maxWidth: '50%',
     marginBottom: '1em',
+    textAlign: 'center'
   },
 })
 
 export default () => {
   const { title, lang, description } = headData
   const classes = useStyles()
-  const [topics, setTopics] = useState([1, 2, 3, 4])
+  const [topics, setTopics] = useState([])
   const [topic, setTopic] = React.useState('')
   const handleChange = (event) => {
     setTopic(event.target.value)
@@ -83,12 +84,12 @@ export default () => {
       <html lang={lang || 'en'} />
       <meta name="description" content={description || 'Secret Test Page'} />
 
-      <CssBaseline />
+      <CssBaseline style={{background: 'url("https://images.pexels.com/photos/242236/pexels-photo-242236.jpeg")'}} />
       <Container maxWidth="sm">
         <Typography
           variant="h3"
           component="div"
-          style={{ backgroundColor: '#cfe8fc', height: '10vh' }}
+          style={{height: '10vh', marginTop: '1em' }}
         >
           Welcome to the VCD Page!
         </Typography>
@@ -109,13 +110,13 @@ export default () => {
           disabled={topic === ''}
           onClick={() => setTopics([...topics, topic])}
         >
-          Click Me!
+          Click to Add to List!
         </Button>
 
-        <List>
+        <List style={{marginLeft: '33%', marginTop: '1em'}}>
           {topics.map((topic, index) => (
             <Card key={index} className={classes.card}>
-              <ListItem>
+              <ListItem style={{textAlign: 'center'}}>
                 <ListItemText primary={topic} />
               </ListItem>
             </Card>
