@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core/styles'
 import { headData } from '../mock/data'
+import axios from 'axios'
 
 const useStyles = makeStyles({
   flex: {
@@ -42,7 +43,7 @@ const useStyles = makeStyles({
   card: {
     maxWidth: '50%',
     marginBottom: '1em',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 })
 
@@ -63,19 +64,14 @@ export default () => {
     setTopics([...topics])
   }
 
-  const renderList = (topic, index) => {
-    return (
-      <Card key={index} className={classes.card}>
-        <ListItem>
-          <ListItemText primary={topic} secondary={index} />
-        </ListItem>
-      </Card>
-    )
-  }
-
-  // useEffect(() => {
-  //     renderList()
-  // }), [topics]
+  useEffect(() => {
+    axios
+      .get('https://3ljubwhnzj.execute-api.us-east-2.amazonaws.com/production/topics')
+      .then((res) => {
+        console.log(res.data)
+        setTopics(res.data)
+      })
+  }, [])
 
   return (
     <>
@@ -84,13 +80,13 @@ export default () => {
       <html lang={lang || 'en'} />
       <meta name="description" content={description || 'Secret Test Page'} />
 
-      <CssBaseline style={{background: 'url("https://images.pexels.com/photos/242236/pexels-photo-242236.jpeg")'}} />
+      <CssBaseline
+        style={{
+          background: 'url("https://images.pexels.com/photos/242236/pexels-photo-242236.jpeg")',
+        }}
+      />
       <Container maxWidth="sm">
-        <Typography
-          variant="h3"
-          component="div"
-          style={{height: '10vh', marginTop: '1em' }}
-        >
+        <Typography variant="h3" component="div" style={{ height: '10vh', marginTop: '1em' }}>
           Welcome to the VCD Page!
         </Typography>
         <div className={classes.flex}>
@@ -108,16 +104,19 @@ export default () => {
           variant="outlined"
           size="small"
           disabled={topic === ''}
-          onClick={() => setTopics([...topics, topic])}
+          onClick={() => {
+            
+            setTopics([...topics, { topic }])
+          }}
         >
           Click to Add to List!
         </Button>
 
-        <List style={{marginLeft: '33%', marginTop: '1em'}}>
+        <List style={{ marginLeft: '33%', marginTop: '1em' }}>
           {topics.map((topic, index) => (
             <Card key={index} className={classes.card}>
-              <ListItem style={{textAlign: 'center'}}>
-                <ListItemText primary={topic} />
+              <ListItem style={{ textAlign: 'center' }}>
+                <ListItemText primary={topic.topic} />
               </ListItem>
             </Card>
           ))}
